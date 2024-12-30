@@ -6,7 +6,7 @@ const api: AxiosInstance = axios.create({
 });
 
 // Global headers
-api.defaults.headers.common["ngrok-skip-browser-warning"] = "69420";
+// api.defaults.headers.common["ngrok-skip-browser-warning"] = "69420";
 
 api.interceptors.request.use(
   (config) => {
