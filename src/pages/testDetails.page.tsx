@@ -288,7 +288,7 @@ const TestDetailsPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-4">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-2">
+      <div className="flex flex-row items-start md:items-center justify-between mb-6 gap-2">
         <Button
           icon={<ArrowLeftOutlined />}
           onClick={() => navigate(-1)}
@@ -303,7 +303,7 @@ const TestDetailsPage: React.FC = () => {
           onClick={() => openQuestionModal()}
           size="middle"
         >
-          Savol Qo‘shish
+          Savol qo‘shish
         </Button>
       </div>
 
@@ -437,8 +437,9 @@ const TestDetailsPage: React.FC = () => {
                   onClick={() => handleAddOption(question.id)}
                   className="text-xs sm:text-sm"
                   size="small"
+                  loading={createOptionMutation.isPending}
                 >
-                  Variant Qo‘shish
+                  Variant qo‘shish
                 </Button>
               </div>
             </div>
@@ -478,7 +479,7 @@ const TestDetailsPage: React.FC = () => {
             label="Savol Matni"
             rules={[{ required: true, message: "Savol matnini kiriting!" }]}
           >
-            <Input
+            <Input.TextArea
               placeholder="Masalan: HTML nima?"
               className="text-sm sm:text-md  "
             />
@@ -496,6 +497,7 @@ const TestDetailsPage: React.FC = () => {
           >
             <InputNumber
               min={0}
+              defaultValue={1}
               style={{ width: "100%" }}
               placeholder="Masalan: 2"
               className="text-sm sm:text-md  "
@@ -518,6 +520,11 @@ const TestDetailsPage: React.FC = () => {
                 htmlType="submit"
                 className="text-xs sm:text-sm"
                 size="middle"
+                loading={
+                  editingQuestion
+                    ? updateQuestionMutation.isPending
+                    : createQuestionMutation.isPending
+                }
               >
                 Saqlash
               </Button>
