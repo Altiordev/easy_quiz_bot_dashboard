@@ -14,7 +14,7 @@ const LoginPage: React.FC = () => {
     onSuccess: (data) => {
       console.log(data);
       localStorage.setItem("chat_id", String(data?.chat_id));
-      notification.success({ message: "Muvaffaqiyatli kirildi!" });
+      notification.success({ message: "Успешный вход!" });
       navigate("/");
 
       if (data?.chat_id) {
@@ -24,8 +24,8 @@ const LoginPage: React.FC = () => {
     onError: (error: any) => {
       console.log(error);
       notification.error({
-        message: "Kirishda xatolik",
-        description: error?.response?.data?.message || "Kutilmagan xatolik!",
+        message: "Ошибка при входе",
+        description: error?.response?.data?.message || "Неожиданная ошибка!",
       });
     },
   });
@@ -49,7 +49,9 @@ const LoginPage: React.FC = () => {
           <Form.Item
             label="CHAT ID"
             name="chat_id"
-            rules={[{ required: true, message: "Iltimos chat_id yozing!" }]}
+            rules={[
+              { required: true, message: "Пожалуйста, введите chat_id!" },
+            ]}
           >
             <Input type="number" placeholder="Telegram chat_id" />
           </Form.Item>
@@ -61,7 +63,7 @@ const LoginPage: React.FC = () => {
               loading={mutation.isPending}
               className="w-full bg-blue-500 hover:bg-blue-600 border-none text-white text-lg"
             >
-              Kirish
+              Войти
             </Button>
           </Form.Item>
         </Form>
