@@ -2,8 +2,51 @@ import {
   IGetAllPagination,
   IPaginationOptions,
 } from "../interfaces/interface.ts";
-import { IOptions, IQuestion, ITest } from "../interfaces/test.interface.ts";
+import {
+  IOptions,
+  IQuestion,
+  ITest,
+  ITopic,
+} from "../interfaces/test.interface.ts";
 import api from "./axios.instance.ts";
+
+async function getTopics(
+  pagination: IPaginationOptions,
+): Promise<IGetAllPagination<ITopic> | null> {
+  const response = await api.get(
+    `/tests/topic?page=${pagination.page}&limit=${pagination.limit}`,
+  );
+
+  if (!response.data) {
+    return {
+      data: [],
+      totalCount: 0,
+      totalPages: 0,
+      currentPage: pagination.page,
+    };
+  }
+  return response.data;
+}
+
+async function getTopicById(topicId: number): Promise<ITopic | null> {
+  const response = await api.get(`/tests/topic/${topicId}`);
+  return response.data;
+}
+
+async function createTopic(data: ITopic): Promise<ITopic | null> {
+  const response = await api.post("/tests/topic", data);
+  return response.data;
+}
+async function updateTopic(
+  topicId: number,
+  data: Partial<ITopic>,
+): Promise<void> {
+  const response = await api.put(`/tests/topic/${topicId}`, data);
+  return response.data;
+}
+async function deleteTopic(topicId: number): Promise<void> {
+  await api.delete(`/tests/topic/${topicId}`);
+}
 
 async function getTests(
   pagination: IPaginationOptions,
@@ -87,4 +130,9 @@ export {
   createOption,
   updateOption,
   deleteOption,
+  getTopics,
+  getTopicById,
+  createTopic,
+  deleteTopic,
+  updateTopic,
 };

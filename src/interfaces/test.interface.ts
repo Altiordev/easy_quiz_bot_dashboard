@@ -1,5 +1,15 @@
 import { TestDifficultyLevelEnum } from "../enums/test.enum.ts";
 
+export interface ITopic {
+  id: number;
+  name: string;
+  description: string;
+  active: boolean;
+  tests?: ITest[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface ITest {
   id: number;
   name: string;

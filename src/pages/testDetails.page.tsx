@@ -88,7 +88,7 @@ const TestDetailsPage: React.FC = () => {
 
     onSuccess: async () => {
       await refetch();
-      message.success("Savol muvaffaqiyatli yangilandi");
+      message.success("Вопрос успешно обновлён");
       setIsQuestionModalVisible(false);
       setEditingQuestion(null);
     },
@@ -96,7 +96,7 @@ const TestDetailsPage: React.FC = () => {
       console.error("Savolni yangilashda xatolik:", error);
       message.error(
         error.response?.data?.message ||
-          "Savolni yangilashda xatolik yuz berdi",
+          "Произошла ошибка при обновлении вопроса",
       );
     },
   });
@@ -105,13 +105,13 @@ const TestDetailsPage: React.FC = () => {
     mutationFn: deleteQuestion,
     onSuccess: async () => {
       await refetch();
-      message.success("Savol muvaffaqiyatli o‘chirildi");
+      message.success("Вопрос успешно удалён");
     },
     onError: (error: any) => {
       console.error("Savolni o‘chirishda xatolik:", error);
       message.error(
         error.response?.data?.message ||
-          "Savolni o‘chirishda xatolik yuz berdi",
+          "Произошла ошибка при обновлении вопроса",
       );
     },
   });
@@ -125,7 +125,8 @@ const TestDetailsPage: React.FC = () => {
     onError: (error: any) => {
       console.error("Variant qo‘shishda xatolik:", error);
       message.error(
-        error.response?.data?.message || "Variant qo‘shishda xatolik yuz berdi",
+        error.response?.data?.message ||
+          "Произошла ошибка при добавлении варианта",
       );
     },
   });
@@ -147,7 +148,7 @@ const TestDetailsPage: React.FC = () => {
       console.error("Variantni tahrirlashda xatolik:", error);
       message.error(
         error.response?.data?.message ||
-          "Variantni tahrirlashda xatolik yuz berdi",
+          "Произошла ошибка при редактировании варианта",
       );
     },
   });
@@ -156,13 +157,13 @@ const TestDetailsPage: React.FC = () => {
     mutationFn: deleteOption,
     onSuccess: async () => {
       await refetch();
-      message.success("Variant muvaffaqiyatli o‘chirildi");
+      message.success("Вариант успешно удалён");
     },
     onError: (error: any) => {
       console.error("Variantni o‘chirishda xatolik:", error);
       message.error(
         error.response?.data?.message ||
-          "Variantni o‘chirishda xatolik yuz berdi",
+          "Произошла ошибка при удалении варианта",
       );
     },
   });
@@ -245,7 +246,7 @@ const TestDetailsPage: React.FC = () => {
       });
     } else {
       // Variant bo‘sh bo‘lsa, variantni o‘chirish yoki boshqa kerakli holatni boshqarish
-      message.error("Variant matni bo‘sh bo‘la olmaydi!");
+      message?.error("Текст варианта не может быть пустым!");
       setEditedOptions((prev) => {
         const updated = { ...prev };
         delete updated[optionId];
@@ -271,7 +272,7 @@ const TestDetailsPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Spin tip="Yuklanmoqda..." size="large" />
+        <Spin tip="Loading..." size="large" />
       </div>
     );
   }
@@ -280,7 +281,7 @@ const TestDetailsPage: React.FC = () => {
     return (
       <div className="flex justify-center items-center h-screen">
         <Text className="text-lg sm:text-xl md:text-2xl lg:text-3xl">
-          Bu test haqida ma'lumot yo‘q
+          Информации об этом тесте нет
         </Text>
       </div>
     );
@@ -295,7 +296,7 @@ const TestDetailsPage: React.FC = () => {
           className="mb-2 md:mb-0"
           size="middle"
         >
-          Orqaga
+          Назад
         </Button>
         <Button
           type="primary"
@@ -303,7 +304,7 @@ const TestDetailsPage: React.FC = () => {
           onClick={() => openQuestionModal()}
           size="middle"
         >
-          Savol qo‘shish
+          Добавить вопрос
         </Button>
       </div>
 
@@ -313,8 +314,8 @@ const TestDetailsPage: React.FC = () => {
           {data.name}
         </div>
         <div className="text-md mt-4">
-          <Text strong>Savollar soni: </Text>
-          {data.questions?.length || 0} ta
+          <Text strong>Количество вопросов: </Text>
+          {data.questions?.length || 0} шт.
         </div>
       </div>
 
@@ -351,13 +352,13 @@ const TestDetailsPage: React.FC = () => {
                     className="text-xs sm:text-sm"
                     size="small"
                   >
-                    Tahrirlash
+                    Редактировать
                   </Button>
                   <Popconfirm
-                    title="Ushbu savolni o‘chirishni tasdiqlaysizmi?"
+                    title="Вы подтверждаете удаление этого вопроса?"
                     onConfirm={() => handleDeleteQuestion(question.id)}
-                    okText="Ha"
-                    cancelText="Yo'q"
+                    okText="Да"
+                    cancelText="Нет"
                   >
                     <Button
                       type="text"
@@ -367,9 +368,9 @@ const TestDetailsPage: React.FC = () => {
                       icon={<DeleteOutlined />}
                     >
                       {/* Mobile: faqat icon */}
-                      <span className="block sm:hidden">O‘chirish</span>
+                      <span className="block sm:hidden">Удалить</span>
                       {/* Desktop: icon va matn */}
-                      <span className="hidden sm:block">Savolni o‘chirish</span>
+                      <span className="hidden sm:block">Удалить вопрос</span>
                     </Button>
                   </Popconfirm>
                 </div>
@@ -400,14 +401,14 @@ const TestDetailsPage: React.FC = () => {
                           handleOptionInputChange(option.id, e.target.value)
                         }
                         onBlur={() => handleOptionBlur(option)}
-                        placeholder="Variant matni"
+                        placeholder="Текст варианта"
                         className="w-full text-sm sm:text-md  "
                       />
                       <Popconfirm
-                        title="Variantni o‘chirishni tasdiqlaysizmi?"
+                        title="Вы подтверждаете удаление варианта?"
                         onConfirm={() => handleDeleteOption(option.id)}
-                        okText="Ha"
-                        cancelText="Yo'q"
+                        okText="Да"
+                        cancelText="Нет"
                       >
                         <Button
                           danger
@@ -419,14 +420,14 @@ const TestDetailsPage: React.FC = () => {
                             <DeleteOutlined />
                           </span>
                           {/* Desktop: icon va matn */}
-                          <span className="hidden sm:block">O‘chirish</span>
+                          <span className="hidden sm:block">Удалить</span>
                         </Button>
                       </Popconfirm>
                     </div>
                   ))
                 ) : (
                   <Text className="text-xs sm:text-sm text-gray-500">
-                    Hech qanday variant mavjud emas.
+                    Никаких вариантов не существует.
                   </Text>
                 )}
 
@@ -439,99 +440,97 @@ const TestDetailsPage: React.FC = () => {
                   size="small"
                   loading={createOptionMutation.isPending}
                 >
-                  Variant qo‘shish
+                  Добавить вариант
                 </Button>
               </div>
             </div>
           ))
         ) : (
           <Text className="text-xs sm:text-sm text-gray-500">
-            Hech qanday savol mavjud emas.
+            Никаких вопросов не существует.
           </Text>
         )}
       </div>
 
       {/* Question Modal */}
-      <Modal
-        title={editingQuestion ? "Savolni Tahrirlash" : "Savol Qo‘shish"}
-        open={isQuestionModalVisible}
-        onCancel={() => {
-          setIsQuestionModalVisible(false);
-          setEditingQuestion(null);
-        }}
-        footer={null}
-        destroyOnClose
-      >
-        <Form
-          layout="vertical"
-          onFinish={handleQuestionModalOk}
-          initialValues={
-            editingQuestion
-              ? {
-                  question: editingQuestion.question,
-                  question_score: editingQuestion.question_score,
-                }
-              : {}
-          }
+      {isQuestionModalVisible && (
+        <Modal
+          title={editingQuestion ? "Редактировать вопрос" : "Добавить вопрос"}
+          open={isQuestionModalVisible}
+          onCancel={() => {
+            setIsQuestionModalVisible(false);
+            setEditingQuestion(null);
+          }}
+          footer={null}
+          destroyOnClose
         >
-          <Form.Item
-            name="question"
-            label="Savol Matni"
-            rules={[{ required: true, message: "Savol matnini kiriting!" }]}
+          <Form
+            layout="vertical"
+            onFinish={handleQuestionModalOk}
+            initialValues={
+              editingQuestion
+                ? {
+                    question: editingQuestion.question,
+                    question_score: editingQuestion.question_score,
+                  }
+                : {}
+            }
           >
-            <Input.TextArea
-              placeholder="Masalan: HTML nima?"
-              className="text-sm sm:text-md  "
-            />
-          </Form.Item>
-          <Form.Item
-            name="question_score"
-            label="Ball (ixtiyoriy)"
-            rules={[
-              {
-                type: "number",
-                min: 0,
-                message: "Ball manfiy bo‘la olmaydi!",
-              },
-            ]}
-          >
-            <InputNumber
-              min={0}
-              defaultValue={1}
-              style={{ width: "100%" }}
-              placeholder="Masalan: 2"
-              className="text-sm sm:text-md  "
-            />
-          </Form.Item>
-          <Form.Item>
-            <Space className="w-full justify-end">
-              <Button
-                onClick={() => {
-                  setIsQuestionModalVisible(false);
-                  setEditingQuestion(null);
-                }}
-                className="text-xs sm:text-sm"
-                size="middle"
-              >
-                Bekor Qilish
-              </Button>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="text-xs sm:text-sm"
-                size="middle"
-                loading={
-                  editingQuestion
-                    ? updateQuestionMutation.isPending
-                    : createQuestionMutation.isPending
-                }
-              >
-                Saqlash
-              </Button>
-            </Space>
-          </Form.Item>
-        </Form>
-      </Modal>
+            <Form.Item
+              name="question"
+              label="Текст вопроса"
+              rules={[{ required: true, message: "Введите текст вопроса!" }]}
+            >
+              <Input.TextArea className="text-sm sm:text-md  " />
+            </Form.Item>
+            <Form.Item
+              name="question_score"
+              label="Баллы (необязательно)"
+              rules={[
+                {
+                  type: "number",
+                  min: 0,
+                  message: "Баллы не могут быть отрицательными!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                defaultValue={1}
+                style={{ width: "100%" }}
+                className="text-sm sm:text-md  "
+              />
+            </Form.Item>
+            <Form.Item>
+              <Space className="w-full justify-end">
+                <Button
+                  onClick={() => {
+                    setIsQuestionModalVisible(false);
+                    setEditingQuestion(null);
+                  }}
+                  className="text-xs sm:text-sm"
+                  size="middle"
+                >
+                  Отменить
+                </Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="text-xs sm:text-sm"
+                  size="middle"
+                  loading={
+                    editingQuestion
+                      ? updateQuestionMutation.isPending
+                      : createQuestionMutation.isPending
+                  }
+                >
+                  Сохранить
+                </Button>
+              </Space>
+            </Form.Item>
+          </Form>
+        </Modal>
+      )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { getAccessToken } from "./api/auth.ts";
 import LoginPage from "./pages/login.page.tsx";
 import TestsPage from "./pages/tests.page.tsx";
 import TestDetailsPage from "./pages/testDetails.page.tsx";
+import TopicsPage from "./pages/topics.page.tsx";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -19,8 +20,9 @@ function App() {
     <>
       <Routes>
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<TestsPage />} />
-          <Route path="/:id" element={<TestDetailsPage />} />
+          <Route path="/" element={<TopicsPage />} />
+          <Route path="/:id" element={<TestsPage />} />
+          <Route path="/test/:id" element={<TestDetailsPage />} />
         </Route>
         <Route
           path="/login"

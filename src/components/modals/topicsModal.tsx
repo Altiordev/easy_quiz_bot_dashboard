@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
-import { ITest } from "../../interfaces/test.interface.ts";
-import { Form, Input, message, Modal, Select, Switch, Typography } from "antd";
+import { Form, Input, message, Modal, Switch, Typography } from "antd";
 import { useMutation } from "@tanstack/react-query";
-import { createTest, updateTest } from "../../api/tests.query.ts";
-import { TestDifficultyLevelEnum } from "../../enums/test.enum.ts";
+import { ITopic } from "../../interfaces/test.interface.ts";
+import { createTopic, updateTopic } from "../../api/tests.query.ts";
 
 const { Text } = Typography;
 
-const TestsModal: React.FC<{
+const TopicsModel: React.FC<{
   visible: boolean;
   onClose: () => void;
   isEditing: boolean;
-  initialValues?: Partial<ITest>;
+  initialValues?: Partial<ITopic>;
   refetch?: () => void;
 }> = ({ visible, onClose, initialValues, isEditing, refetch }) => {
   const [form] = Form.useForm();
@@ -26,20 +25,18 @@ const TestsModal: React.FC<{
     }
   }, [isEditing, initialValues, form]);
 
-  const mutation = useMutation<void | null, Error, Partial<ITest>>({
-    mutationFn: async (values: Partial<ITest>) => {
+  const mutation = useMutation<void | null, Error, Partial<ITopic>>({
+    mutationFn: async (values: Partial<ITopic>) => {
       if (isEditing && initialValues?.id) {
-        await updateTest(initialValues.id, values);
+        await updateTopic(initialValues.id, values);
         return null;
       }
-      await createTest(values as ITest);
+      await createTopic(values as ITopic);
       return null;
     },
     onSuccess: () => {
       message?.success(
-        isEditing
-          ? "Test muvaffaqiyatli yangilandi"
-          : "Test muvaffaqiyatli yaratildi",
+        isEditing ? "Тема успешно обновлена" : "Тема успешно создана",
       );
       form.resetFields();
       refetch?.();
@@ -64,50 +61,43 @@ const TestsModal: React.FC<{
       title={
         isEditing ? (
           <Text strong italic>
-            Testni tahrirlash
+            Редактировать тему
           </Text>
         ) : (
           <Text strong italic>
-            Test yaratish
+            Создать тему
           </Text>
         )
       }
+      width={1000}
       open={visible}
       onOk={handleOk}
       onCancel={onClose}
       confirmLoading={mutation.isPending}
+      destroyOnClose
     >
       <Form form={form} layout="vertical" initialValues={initialValues}>
         <Form.Item
-          label={<Text strong>Nomi</Text>}
+          label={<Text strong>Название темы</Text>}
           name="name"
           rules={[
-            { required: true, message: "Iltimos, test nomini kiriting!" },
-            { max: 255, message: "Test nomi 255 belgidan oshmasligi kerak!" },
+            { required: true, message: "Пожалуйста, введите название темы!" },
           ]}
         >
-          <Input.TextArea
-            rows={3}
-            maxLength={255}
-            showCount
-            placeholder="Test nomini kiriting..."
-          />
+          <Input.TextArea rows={3} showCount />
         </Form.Item>
 
         <Form.Item
-          label={<Text strong>Qiyinchilik darajasi</Text>}
-          name="difficulty_level"
+          label={<Text strong>Подробнее о теме</Text>}
+          name="description"
+          rules={[
+            {
+              required: true,
+              message: "Пожалуйста, введите подробнее о теме!",
+            },
+          ]}
         >
-          <Select allowClear placeholder="Tanlanmagan">
-            <Select.Option key="null" value={null}>
-              Tanlanmagan
-            </Select.Option>
-            {Object.values(TestDifficultyLevelEnum).map((level) => (
-              <Select.Option key={level} value={level}>
-                {level}
-              </Select.Option>
-            ))}
-          </Select>
+          <Input.TextArea rows={5} showCount />
         </Form.Item>
 
         <Form.Item
@@ -122,4 +112,4 @@ const TestsModal: React.FC<{
   );
 };
 
-export default TestsModal;
+export default TopicsModel;
