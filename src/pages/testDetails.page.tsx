@@ -178,7 +178,7 @@ const TestDetailsPage: React.FC = () => {
 
   // Handle form submission for question modal
   const handleQuestionModalOk = (values: QuestionFormValues) => {
-    const { question, question_score } = values;
+    const { question, question_score = 1 } = values;
 
     if (editingQuestion?.id) {
       // Update existing question
