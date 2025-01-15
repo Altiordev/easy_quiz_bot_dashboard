@@ -31,6 +31,7 @@ const TopicsModel: React.FC<{
         await updateTopic(initialValues.id, values);
         return null;
       }
+      console.log(values);
       await createTopic(values as ITopic);
       return null;
     },
@@ -42,7 +43,8 @@ const TopicsModel: React.FC<{
       refetch?.();
       onClose();
     },
-    onError: () => {
+    onError: (e) => {
+      console.log(e);
       message?.error("Произошла ошибка при выполнении действия");
     },
   });

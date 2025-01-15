@@ -4,6 +4,7 @@ import { Form, Input, message, Modal, Select, Switch, Typography } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import { createTest, updateTest } from "../../api/tests.query.ts";
 import { TestDifficultyLevelEnum } from "../../enums/test.enum.ts";
+import { useParams } from "react-router-dom";
 
 const { Text } = Typography;
 
@@ -15,6 +16,8 @@ const TestsModal: React.FC<{
   refetch?: () => void;
 }> = ({ visible, onClose, initialValues, isEditing, refetch }) => {
   const [form] = Form.useForm();
+  const { id: topicIdParam } = useParams<{ id: string }>();
+  const topicId = Number(topicIdParam);
 
   useEffect(() => {
     if (isEditing && initialValues) {
@@ -54,6 +57,7 @@ const TestsModal: React.FC<{
     form
       .validateFields()
       .then((values) => {
+        values.topic_id = topicId;
         mutation.mutate(values);
       })
       .catch((info) => console.log("Tasdiqlashda xatolik:", info));
